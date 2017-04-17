@@ -1,4 +1,4 @@
-# Dyn_Prog
+# Dynamic Programming - Com_S 311 PA #3
 
 Contributors:
 
