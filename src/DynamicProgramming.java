@@ -17,7 +17,7 @@ public class DynamicProgramming {
 	/**
 	 * 
 	 * @param M
-	 * @return
+	 * @returns
 	 */
 	public static ArrayList<Integer> minCostVC(int[][] M) {
 		
