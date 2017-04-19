@@ -4,10 +4,20 @@
  */
 
 public class ImageProcessor {
+	
+	/**
+	 * 
+	 * @param imageFile
+	 */
 	public ImageProcessor(String imageFile) {
 		
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @return
+	 */
 	public Picture reduceWidth(double x) {
 		
 		
