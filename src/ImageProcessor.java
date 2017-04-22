@@ -1,20 +1,21 @@
 import java.awt.Color;
+import java.util.ArrayList;
 
 /**
- * @author Zach Johnson
  * @author Brett Wilhelm
+ * @author Zach Johnson
  */
 
 public class ImageProcessor {
-	Picture p;
-	int[][] I;
+	private Picture p;
+	private int[][] I;
 	
 	/**
 	 * Constructor
 	 * @param imageFile Name of the image to be manipulated
 	 */
 	public ImageProcessor(String imageFile) {
-		p = new Picture(0, 0);
+		p = new Picture(imageFile);
 	}
 	
 	/**
@@ -23,12 +24,39 @@ public class ImageProcessor {
 	 * @return The picture after the width has been reduced/modified
 	 */
 	public Picture reduceWidth(double x) {
-		Picture p = new Picture((int)x, this.p.width());
-		I = new int[this.p.height()][this.p.width()];
+		Picture P = new Picture((int)x, p.height());
+		ArrayList<Integer> toRemove;
 		
-		computeMatrix();
+		for(int i = 0; i < (p.width()-(int)x); i++) {
+			I = new int[p.height()][p.width()-i];
+			computeMatrix();
+			toRemove = DynamicProgramming.minCostVC(I);
+			P = makeImage(P, toRemove);
+		}
+		return P;
+	}
+	
+	/**
+	 * Copies the first picture into the second, but removes pixels to satisfy reduceWidth()
+	 * @param P The picture to be edited
+	 * @param toRemove	The ArrayList of coordinates to remove to minimize cost
+	 * @return The picture with reduced width
+	 */
+	private Picture makeImage(Picture P, ArrayList<Integer> toRemove) {
+		int i, j, k, l;
+		for(i = 0, k = 0; i < P.height(); i++, k++) {
+			for(j = 0, l = 0; j < P.width(); j++, l++) {
+				if(toRemove.get(k*2).equals(k) && (toRemove.get(k*2+1).equals(l))) {
+					i--;
+					j--;
+				}
+				else {
+					P.set(j, i, p.get(l, k));
+				}
+			}
+		}
 		
-		return p;
+		return P;
 	}
 	
 	/**
