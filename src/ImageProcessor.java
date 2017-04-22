@@ -46,6 +46,11 @@ public class ImageProcessor {
 		return (int)Math.floor(distance);
 	}
 	
+	/**
+	 * Method for finding the YImportance value of a pixel
+	 * @param pixel Coordinates of pixel to be checked
+	 * @return YImportance value of pixel argument
+	 */
 	private int yImportance(int[] pixel) {
 		int pHeight = this.p.height();
 		int firstVal[] = new int[2];
@@ -75,6 +80,11 @@ public class ImageProcessor {
 		return dist(firstVal, secVal);
 	}
 	
+	/**
+	 * Method for finding the XImportance value of a pixel
+	 * @param pixel Coordinates of pixel to be checked
+	 * @return XImportance value of pixel argument
+	 */
 	private int xImportance(int[] pixel) {
 		int firstVal[] = new int[2];
 		int secVal[] = new int[2];
