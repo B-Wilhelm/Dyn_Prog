@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 /**
  * @author Zach Johnson
  * @author Brett Wilhelm
@@ -27,11 +29,77 @@ public class ImageProcessor {
 		return p;
 	}
 	
+	/**
+	 * 
+	 * @param p Coordinates of 1st pixel in Picture
+	 * @param q	Coordinates of 2nd pixel in Picture
+	 * @return	Difference between color values of two pixels
+	 */
 	private int dist(int[] p, int[] q) {
-		int distance = 0;
+		double distance = 0;
+		Color pC, qC;
 		
-		distance = Math.pow(p[0]-q[0], 2) + Math.pow(p[1]-q[1], 2) + Math.pow(p[2]-q[2], 2);
+		pC = this.p.get(p[0], p[1]);
+		qC = this.p.get(q[0], q[1]);
+		distance = Math.pow(pC.getRed()-qC.getRed(), 2) + Math.pow(pC.getGreen()-qC.getGreen(), 2) + Math.pow(pC.getBlue()-qC.getBlue(), 2);
 		
-		return distance;
+		return (int)Math.floor(distance);
+	}
+	
+	private int yImportance(int[] pixel) {
+		int pHeight = this.p.height();
+		int firstVal[] = new int[2];
+		int secVal[] = new int[2];
+		int i = pixel[0];
+		int j = pixel[1];
+		
+		firstVal[1] = j;
+		secVal[1] = j;
+		
+		if(i < 0 && i > pHeight) {
+			return -1;
+		}
+		
+		if(i == 0) {
+			firstVal[0] = pHeight-1;
+			secVal[0] = i+1;
+		}
+		else if(i == pHeight-1) {
+			firstVal[0] = i-1;
+			secVal[0] = 0;
+		}
+		else {
+			firstVal[0] = i-1;
+			secVal[0] = i+1;
+		}
+		return dist(firstVal, secVal);
+	}
+	
+	private int xImportance(int[] pixel) {
+		int firstVal[] = new int[2];
+		int secVal[] = new int[2];
+		int i = pixel[0], j = pixel[1];
+		int pWidth = this.p.width();
+		
+		firstVal[0] = i;
+		secVal[0] = i;
+		
+		if(j < 0 && j > pWidth) {
+			return -1;
+		}
+		
+		if(j == 0) {
+			firstVal[1] = pWidth-1;
+			secVal[1] = j+1;
+		}
+		else if(j == pWidth-1) {
+			firstVal[1] = 0;
+			secVal[1] = j-1;
+		}
+		else {
+			firstVal[1] = j-1;
+			secVal[1] = j+1;
+		}
+		return dist(firstVal, secVal);
 	}
 }
