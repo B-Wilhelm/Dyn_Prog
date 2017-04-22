@@ -25,6 +25,11 @@ public class DynamicProgramming {
 	public static ArrayList<Integer> minCostVC(int[][] M) {
 		ArrayList<Integer> cut = new ArrayList<Integer>();
 		
+		for(int i = 0; i < M[0].length; i++) {
+			cut.add(i);
+			cut.add(1);
+		}
+		
 		return cut;
 	}
 	

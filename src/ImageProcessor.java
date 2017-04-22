@@ -29,22 +29,24 @@ public class ImageProcessor {
 		Picture comp = new Picture(p);
 		ArrayList<Integer> toRemove;
 		
-		for(int i = 0; i < (p.width()-(int)x); i++) {
-			I = new int[p.height()][p.width()-i];
+		for(int i = 0; i < (comp.width()-(int)x); i++) {
+			I = new int[comp.height()][comp.width()-i];
 			computeMatrix();
 			toRemove = DynamicProgramming.minCostVC(I);
-			P = makeImage(P, toRemove);
+			P = makeImage(comp, P, toRemove);
+			comp = new Picture(P);
 		}
 		return P;
 	}
 	
 	/**
 	 * Copies the first picture into the second, but removes pixels to satisfy reduceWidth()
+	 * @param c The picture used as a comparison for removing pixels
 	 * @param P The picture to be edited
 	 * @param toRemove	The ArrayList of coordinates to remove to minimize cost
 	 * @return The picture with reduced width
 	 */
-	private Picture makeImage(Picture P, ArrayList<Integer> toRemove) {
+	private Picture makeImage(Picture c, Picture P, ArrayList<Integer> toRemove) {
 		int i, j, k, l;
 		for(i = 0, k = 0; i < P.height(); i++, k++) {
 			for(j = 0, l = 0; j < P.width(); j++, l++) {
@@ -53,7 +55,7 @@ public class ImageProcessor {
 					j--;
 				}
 				else {
-					P.set(j, i, p.get(l, k));
+					P.set(j, i, c.get(l, k));
 				}
 			}
 		}
