@@ -47,14 +47,15 @@ public class ImageProcessor {
 	 * @return The picture with reduced width
 	 */
 	private Picture makeImage(Picture c, Picture P, ArrayList<Integer> toRemove) {
-		int i, j, k, l;
-		for(i = 0, k = 0; i < P.height(); i++, k++) {
+		int i, j, l;
+		
+		for(i = 0; i < P.height(); i++) {
 			for(j = 0, l = 0; j < P.width(); j++, l++) {
-				if(toRemove.get(k*2).equals(k) && (toRemove.get(k*2+1).equals(l))) {
+				if(toRemove.get(j*2).equals(j) && (toRemove.get(j*2+1).equals(l))) {
 					j--;
 				}
 				else {
-					P.set(j, i, c.get(l, k));
+					P.set(j, i, c.get(l, i));
 				}
 			}
 		}
