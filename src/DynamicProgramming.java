@@ -40,7 +40,7 @@ public class DynamicProgramming {
 		return null;
 	}
 	//stringAlignment helper methods
-	protected Cell getInitialPointer(int r, int c) {
+	private Cell getInitialPointer(int r, int c) {
 		if(r == 0 && c != 0) {
 			return scoreTable[r][c-1];
 		}
@@ -52,7 +52,7 @@ public class DynamicProgramming {
 		}
 	}
 	
-	protected int getInitalScore(int r, int c) {
+	private int getInitalScore(int r, int c) {
 		if(r == 0 && c != 0) {
 			return c*$;
 		}
@@ -64,10 +64,46 @@ public class DynamicProgramming {
 		}
 	}
 	
-	protected void fillInCell(Cell cur, Cell cellAbove, Cell cellLeft, Cell CellAboveLeft, String s1, String s2) {
+	private void fillInCell(Cell cur, Cell cellAbove, Cell cellLeft, Cell cellAboveLeft, String s1, String s2) {
 		int row$Score = cellAbove.getPenalty() + $;
 		int col$Score = cellLeft.getPenalty() + $;
-		//TODO
+		int isMatchScore = cellAboveLeft.getPenalty();
+		
+		if(s2.charAt(cur.getRow() - 1) == s1.charAt(cur.getCol()-1)){
+			isMatchScore += match;
+		}
+		else {
+			isMatchScore += mismatch;
+		}
+		
+		if(row$Score >= col$Score) {
+			if(isMatchScore >= row$Score) {
+				cur.setPenalty(isMatchScore);
+				cur.setPrevious(cellAboveLeft);
+			} else {
+				cur.setPenalty(row$Score);
+				cur.setPrevious(cellAbove);
+			}
+		} else {
+			if(isMatchScore >= col$Score) {
+				cur.setPenalty(isMatchScore);
+				cur.setPrevious(cellAboveLeft);
+			} else {
+				cur.setPenalty(col$Score);
+				cur.setPrevious(cellLeft);
+			}
+		}
+	}
+	
+	private Object getTraceback() {
+		StringBuffer align1Buf = new StringBuffer();
+		StringBuffer align2Buf = new StringBuffer();
+		Cell cur = scoreTable[scoreTable.length - 1][scoreTable[0].length -1];
+		while(cur.getPrevious() != null) {
+			//TODO
+		}
+		String[] alignments = new String[] { align1Buf.toString(), align2Buf.toString() };
+		return alignments;
 	}
 	
 }
