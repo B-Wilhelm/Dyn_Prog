@@ -30,7 +30,7 @@ public class ImageProcessor {
 	}
 	
 	/**
-	 * 
+	 * Finds the color distance value for two pixels, used for finding the XImportance and YImportance values.
 	 * @param p Coordinates of 1st pixel in Picture
 	 * @param q	Coordinates of 2nd pixel in Picture
 	 * @return	Difference between color values of two pixels
