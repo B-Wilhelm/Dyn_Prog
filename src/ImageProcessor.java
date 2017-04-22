@@ -51,7 +51,6 @@ public class ImageProcessor {
 		for(i = 0, k = 0; i < P.height(); i++, k++) {
 			for(j = 0, l = 0; j < P.width(); j++, l++) {
 				if(toRemove.get(k*2).equals(k) && (toRemove.get(k*2+1).equals(l))) {
-					i--;
 					j--;
 				}
 				else {
