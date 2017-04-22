@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 
 public class ImageProcessor {
-	private Picture p;
+	public Picture p;
 	private int[][] I;
 	
 	/**
@@ -16,6 +16,7 @@ public class ImageProcessor {
 	 */
 	public ImageProcessor(String imageFile) {
 		p = new Picture(imageFile);
+		System.out.println("Picture Created!");
 	}
 	
 	/**
@@ -24,7 +25,8 @@ public class ImageProcessor {
 	 * @return The picture after the width has been reduced/modified
 	 */
 	public Picture reduceWidth(double x) {
-		Picture P = new Picture((int)x, p.height());
+		Picture P = new Picture((int)Math.ceil(x), p.height());
+		Picture comp = new Picture(p);
 		ArrayList<Integer> toRemove;
 		
 		for(int i = 0; i < (p.width()-(int)x); i++) {
@@ -163,8 +165,8 @@ public class ImageProcessor {
 		double distance = 0;
 		Color pC, qC;
 		
-		pC = this.p.get(p[0], p[1]);
-		qC = this.p.get(q[0], q[1]);
+		pC = this.p.get(p[1], p[0]);
+		qC = this.p.get(q[1], q[0]);
 		distance = Math.pow(pC.getRed()-qC.getRed(), 2) + Math.pow(pC.getGreen()-qC.getGreen(), 2) + Math.pow(pC.getBlue()-qC.getBlue(), 2);
 		
 		return (int)Math.floor(distance);
