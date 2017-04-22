@@ -112,4 +112,15 @@ public class ImageProcessor {
 		}
 		return dist(firstVal, secVal);
 	}
+	
+	/**
+	 * Method for finding the Importance value of a pixel
+	 * @param pixel Coordinates of pixel to be checked
+	 * @return Importance value of pixel argument
+	 */
+	private int importance(int[] pixel) {
+		int importance = xImportance(pixel) + yImportance(pixel);
+		
+		return importance;
+	}
 }
