@@ -77,8 +77,8 @@ public class DynamicProgramming {
 	}
 	
 	private static void fillInScoreTable(String s1, String s2){
-		for(int i = 0; i < scoreTable.length; i++) {
-			for(int j = 0; j < scoreTable.length; j++) {
+		for(int i = 1; i < scoreTable.length; i++) {
+			for(int j = 1; j < scoreTable.length; j++) {
 				Cell cur = scoreTable[i][j];
 				Cell cellAbove = scoreTable[i-1][j];
 				Cell cellLeft = scoreTable[i][j-1];
