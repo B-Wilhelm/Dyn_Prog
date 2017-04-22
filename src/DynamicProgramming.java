@@ -20,9 +20,9 @@ public class DynamicProgramming {
 	 * @returns
 	 */
 	public static ArrayList<Integer> minCostVC(int[][] M) {
+		ArrayList<Integer> cut = new ArrayList<Integer>();
 		
-		
-		return null;
+		return cut;
 	}
 	
 	/**
@@ -32,7 +32,10 @@ public class DynamicProgramming {
 	 * @return
 	 */
 	public static String stringAlignment(String x, String y) {
-		
+		int minCost = (x.length() - y.length()) * 4;
+		if(minCost == 0){//if the strings are the same length
+			return y;
+		}
 		
 		return null;
 	}
