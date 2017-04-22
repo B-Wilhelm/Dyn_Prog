@@ -7,6 +7,7 @@ import java.awt.Color;
 
 public class ImageProcessor {
 	Picture p;
+	int[][] I;
 	
 	/**
 	 * Constructor
@@ -22,32 +23,43 @@ public class ImageProcessor {
 	 * @return The picture after the width has been reduced/modified
 	 */
 	public Picture reduceWidth(double x) {
-		Picture p = new Picture((int)x, 0);
+		Picture p = new Picture((int)x, this.p.width());
+		I = new int[this.p.height()][this.p.width()];
 		
-		
+		computeMatrix();
 		
 		return p;
 	}
 	
 	/**
-	 * Finds the color distance value for two pixels, used for finding the XImportance and YImportance values.
-	 * @param p Coordinates of 1st pixel in Picture
-	 * @param q	Coordinates of 2nd pixel in Picture
-	 * @return	Difference between color values of two pixels
+	 * Fills the matrix I with values made from calling importance() on every pixel in the Picture
 	 */
-	private int dist(int[] p, int[] q) {
-		double distance = 0;
-		Color pC, qC;
+	private void computeMatrix() {
+		if(I == null) {
+			return;
+		}
 		
-		pC = this.p.get(p[0], p[1]);
-		qC = this.p.get(q[0], q[1]);
-		distance = Math.pow(pC.getRed()-qC.getRed(), 2) + Math.pow(pC.getGreen()-qC.getGreen(), 2) + Math.pow(pC.getBlue()-qC.getBlue(), 2);
-		
-		return (int)Math.floor(distance);
+		for(int i = 0; i < p.height(); i++) {
+			for(int j = 0; j < p.width(); j++) {
+				I[i][j] = importance(i, j);
+			}
+		}
 	}
 	
 	/**
-	 * Method for finding the YImportance value of a pixel
+	 * Method for finding the Importance value of a pixel, calls upon xImportance() and yImportance()
+	 * @param pixel Coordinates of pixel to be checked
+	 * @return Importance value of pixel argument
+	 */
+	private int importance(int i, int j) {
+		int[] pixel = {i, j};
+		int importance = xImportance(pixel) + yImportance(pixel);
+		
+		return importance;
+	}
+	
+	/**
+	 * Method for finding the YImportance value of a pixel, calls upon dist()
 	 * @param pixel Coordinates of pixel to be checked
 	 * @return YImportance value of pixel argument
 	 */
@@ -81,7 +93,7 @@ public class ImageProcessor {
 	}
 	
 	/**
-	 * Method for finding the XImportance value of a pixel
+	 * Method for finding the XImportance value of a pixel, calls upon dist()
 	 * @param pixel Coordinates of pixel to be checked
 	 * @return XImportance value of pixel argument
 	 */
@@ -114,13 +126,19 @@ public class ImageProcessor {
 	}
 	
 	/**
-	 * Method for finding the Importance value of a pixel
-	 * @param pixel Coordinates of pixel to be checked
-	 * @return Importance value of pixel argument
+	 * Finds the color distance value for two pixels, used for finding the XImportance and YImportance values.
+	 * @param p Coordinates of 1st pixel in Picture
+	 * @param q	Coordinates of 2nd pixel in Picture
+	 * @return	Difference between color values of two pixels
 	 */
-	private int importance(int[] pixel) {
-		int importance = xImportance(pixel) + yImportance(pixel);
+	private int dist(int[] p, int[] q) {
+		double distance = 0;
+		Color pC, qC;
 		
-		return importance;
+		pC = this.p.get(p[0], p[1]);
+		qC = this.p.get(q[0], q[1]);
+		distance = Math.pow(pC.getRed()-qC.getRed(), 2) + Math.pow(pC.getGreen()-qC.getGreen(), 2) + Math.pow(pC.getBlue()-qC.getBlue(), 2);
+		
+		return (int)Math.floor(distance);
 	}
 }
