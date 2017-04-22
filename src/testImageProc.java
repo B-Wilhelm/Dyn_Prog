@@ -10,5 +10,4 @@ public class testImageProc {
 		Picture p = ip.reduceWidth(300);
 		p.show();
 	}
-
 }
