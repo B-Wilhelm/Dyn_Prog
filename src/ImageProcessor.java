@@ -53,7 +53,7 @@ public class ImageProcessor {
 		
 		for(i = 0; i < P.height(); i++) {
 			for(j = 0, l = 0; j < P.width(); j++, l++) {
-				if(toRemove.get(l*2).equals(l) && (toRemove.get(l*2+1).equals(i))) {
+				if(toRemove.get(i*2).equals(l) && (toRemove.get(i*2+1).equals(i))) {
 					
 					j--;
 //					P.set(j, i, Color.BLACK);

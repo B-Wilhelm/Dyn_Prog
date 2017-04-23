@@ -53,7 +53,8 @@ public class DynamicProgramming {
 			}
 		}
 		col = temp;//what column we found the lowest cost from
-		cut.add(M[numRows-1][col]);//int at the lowest row from the column we found the min value
+		cut.add(numRows-1);
+		cut.add(col);//int at the lowest row from the column we found the min value
 		for(row = numRows-1; row > 0; row--){
 			if(col == 0) {
 				if(TC[row-1][col] > TC[row-1][col+1]){
@@ -71,9 +72,10 @@ public class DynamicProgramming {
 					col++;
 				}
 			}
-			cut.add(0,M[row-1][col]);
+			cut.add(0,col);
+			cut.add(0,row-1);
 		}
-		System.out.println(cut);
+		//System.out.println(cut);
 		return cut;
 	}
 	/**
