@@ -48,13 +48,23 @@ public class DynamicProgramming {
 		row = temp;
 		cut.add(M[row][M.length]);
 		for(col = M[0].length; col > 0; col--){
-			if(col == 0) {
-				
+			if(row == 0) {
+				if(TC[row][col -1] > TC[row+1][col -1]){
+					row++;
+				} 
 			} else if (col == M.length){
-				
+				if(TC[row][col -1] > TC[row-1][col -1]){
+					row--;
+				} 
 			} else {
-				
+				min = getMin(TC[row -1][col -1], TC[row-1][col], TC[row-1][col+1]);
+				if(min == TC[row -1][col -1]){
+					row--;
+				}else if(min == TC[row+1][col -1]){
+					row++;
+				}
 			}
+			cut.add(0,M[row][col]);
 		}
 		
 		return cut;
