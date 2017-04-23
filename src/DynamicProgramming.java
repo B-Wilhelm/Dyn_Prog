@@ -25,52 +25,59 @@ public class DynamicProgramming {
 	public static ArrayList<Integer> minCostVC(int[][] M) {
 		ArrayList<Integer> cut = new ArrayList<Integer>();
 		//ArrayList<Integer> tempList = new ArrayList<Integer>(); 
+		int numRows = M.length;
+		int numCols = M[0].length;
 		int row, col;//loop guards
-		int TC[][] = new int[M.length][M[0].length+1];
-		TC[0][0] = M[0][0];
-		for(col = 1; col < M[0].length; col++) {
-			TC[0][col] = TC[0][col-1] + ((M[0][col] < M[1][col])? M[0][col] : M[1][col]);
-			TC[M.length -1][col] = TC[M.length -1][col-1] + ((M[0][col] < M[1][col])? M[M.length -1][col] : M[M.length - 2][col]);
+		int TC[][] = new int[numRows][numCols];
+		
+		for(col = 0; col < numCols; col++) {
+			TC[0][col] = M[0][col];
 		}
-		for(row = 1; row < M.length; row++){
-			for(col = 1; col < M[0].length; col++){
+		
+		for(row = 1; row < numRows; row++) {//setting up mincost of the edge columns
+			TC[row][0] = M[row][0] + ((TC[row-1][0] < TC[row-1][1])? TC[row-1][0] :TC[row-1][1]);
+			TC[row][numCols-1] = M[row][numCols-1] + ((TC[row-1][numCols-2] < TC[row-1][numCols-1])? TC[row-1][numCols-2] :TC[row-1][numCols-1]);
+		}
+		
+		for(row = 1; row < numRows; row++){
+			for(col = 1; col < numCols -1; col++){
 				TC[row][col] = getMin(TC[row-1][col-1], TC[row-1][col], TC[row-1][col+1]) + M[row][col];
 			}
 		}
-		int min = M[M.length-1][0];
+		int min = M[numRows-1][0];
 		int temp = 0;
-		for(row = 1; row < M.length; row++)	{
-			if(M[row][M[0].length -1] < min){
-				min = TC[row][col];
-				temp = row;
+		for(col = 1; col < numCols; col++)	{//find the lowest cost from the lowest row of TC matrix
+			if(M[numRows-1][col] < min){
+				min = TC[numRows -1][col];
+				temp = col;
 			}
 		}
-		row = temp;
-		cut.add(M[row][M[0].length-1]);
-		for(col = M[0].length; col > 0; col--){
-			if(row == 0) {
-				if(TC[row][col -1] > TC[row+1][col -1]){
-					row++;
+		col = temp;//what column we found the lowest cost from
+		cut.add(M[numRows-1][col]);//int at the lowest row from the column we found the min value
+		for(row = numRows-2; row > 0; row--){
+			if(col == 0) {
+				if(TC[row-1][col] > TC[row][col+1]){
+					col++;
 				} 
-			} else if (col == M[0].length){
-				if(TC[row][col -1] > TC[row-1][col -1]){
-					row--;
+			} else if (col == numCols-1){
+				if(TC[row][col] > TC[row-1][col-1]){
+					col--;
 				} 
 			} else {
 				min = getMin(TC[row -1][col -1], TC[row-1][col], TC[row-1][col+1]);
-				if(min == TC[row -1][col -1]){
-					row--;
-				}else if(min == TC[row+1][col -1]){
-					row++;
+				if(min == TC[row -1][col-1]){
+					col--;
+				}else if(min == TC[row+1][col+1]){
+					col++;
 				}
 			}
-			cut.add(0,M[row][col-1]);
+			cut.add(0,M[row][col]);
 		}
 		
 		return cut;
 	}
 		private static int getMin(int x, int y, int z) {
-			if( x< y)
+			if(x< y)
 			{
 				return (x < z)? x :z;
 			}
