@@ -54,38 +54,42 @@ public class DynamicProgramming {
 		}
 		col = temp;//what column we found the lowest cost from
 		cut.add(M[numRows-1][col]);//int at the lowest row from the column we found the min value
-		for(row = numRows-2; row > 0; row--){
+		for(row = numRows-1; row > 0; row--){
 			if(col == 0) {
-				if(TC[row-1][col] > TC[row][col+1]){
+				if(TC[row-1][col] > TC[row-1][col+1]){
 					col++;
 				} 
 			} else if (col == numCols-1){
-				if(TC[row][col] > TC[row-1][col-1]){
+				if(TC[row-1][col] > TC[row-1][col-1]){
 					col--;
 				} 
 			} else {
 				min = getMin(TC[row -1][col -1], TC[row-1][col], TC[row-1][col+1]);
-				if(min == TC[row -1][col-1]){
+				if(min == TC[row-1][col-1]){
 					col--;
-				}else if(min == TC[row+1][col+1]){
+				}else if(min == TC[row-1][col+1]){
 					col++;
 				}
 			}
-			cut.add(0,M[row][col]);
+			cut.add(0,M[row-1][col]);
 		}
-		
+		System.out.println(cut);
 		return cut;
 	}
-		private static int getMin(int x, int y, int z) {
-			if(x< y)
-			{
-				return (x < z)? x :z;
-			}
-			else 
-			{
-				return(y < z)? y : z;
-			}
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return returns the minimum value between x, y, z
+	 */
+	private static int getMin(int x, int y, int z) {
+		if(x< y) {
+			return (x < z)? x :z;
+		} else {
+			return(y < z)? y : z;
 		}
+	}
 	/**
 	 * 
 	 * @param x the target string assumed longer than y
