@@ -28,31 +28,31 @@ public class DynamicProgramming {
 		int row, col;//loop guards
 		int TC[][] = new int[M.length][M[0].length+1];
 		TC[0][0] = M[0][0];
-		for(col = 1; col <= M[0].length; col++) {
+		for(col = 1; col < M[0].length; col++) {
 			TC[0][col] = TC[0][col-1] + ((M[0][col] < M[1][col])? M[0][col] : M[1][col]);
 			TC[M.length -1][col] = TC[M.length -1][col-1] + ((M[0][col] < M[1][col])? M[M.length -1][col] : M[M.length - 2][col]);
 		}
 		for(row = 1; row < M.length; row++){
-			for(col = 1; col <= M[0].length; col++){
+			for(col = 1; col < M[0].length; col++){
 				TC[row][col] = getMin(TC[row-1][col-1], TC[row-1][col], TC[row-1][col+1]) + M[row][col];
 			}
 		}
 		int min = M[M.length-1][0];
 		int temp = 0;
-		for(row = 1; row <= M.length; row++)	{
-			if(M[row][M[0].length] < min){
+		for(row = 1; row < M.length; row++)	{
+			if(M[row][M[0].length -1] < min){
 				min = TC[row][col];
 				temp = row;
 			}
 		}
 		row = temp;
-		cut.add(M[row][M.length]);
+		cut.add(M[row][M[0].length-1]);
 		for(col = M[0].length; col > 0; col--){
 			if(row == 0) {
 				if(TC[row][col -1] > TC[row+1][col -1]){
 					row++;
 				} 
-			} else if (col == M.length){
+			} else if (col == M[0].length){
 				if(TC[row][col -1] > TC[row-1][col -1]){
 					row--;
 				} 
@@ -64,7 +64,7 @@ public class DynamicProgramming {
 					row++;
 				}
 			}
-			cut.add(0,M[row][col]);
+			cut.add(0,M[row][col-1]);
 		}
 		
 		return cut;
