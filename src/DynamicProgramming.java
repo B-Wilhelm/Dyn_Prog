@@ -24,15 +24,51 @@ public class DynamicProgramming {
 	 */
 	public static ArrayList<Integer> minCostVC(int[][] M) {
 		ArrayList<Integer> cut = new ArrayList<Integer>();
-		
-		for(int i = 0; i < M[0].length; i++) {
-			cut.add(i);
-			cut.add(1);
+		//ArrayList<Integer> tempList = new ArrayList<Integer>(); 
+		int row, col;//loop guards
+		int TC[][] = new int[M.length][M[0].length+1];
+		TC[0][0] = M[0][0];
+		for(col = 1; col <= M[0].length; col++) {
+			TC[0][col] = TC[0][col-1] + ((M[0][col] < M[1][col])? M[0][col] : M[1][col]);
+			TC[M.length -1][col] = TC[M.length -1][col-1] + ((M[0][col] < M[1][col])? M[M.length -1][col] : M[M.length - 2][col]);
+		}
+		for(row = 1; row < M.length; row++){
+			for(col = 1; col <= M[0].length; col++){
+				TC[row][col] = getMin(TC[row-1][col-1], TC[row-1][col], TC[row-1][col+1]) + M[row][col];
+			}
+		}
+		int min = M[M.length-1][0];
+		int temp = 0;
+		for(row = 1; row <= M.length; row++)	{
+			if(M[row][M[0].length] < min){
+				min = TC[row][col];
+				temp = row;
+			}
+		}
+		row = temp;
+		cut.add(M[row][M.length]);
+		for(col = M[0].length; col > 0; col--){
+			if(col == 0) {
+				
+			} else if (col == M.length){
+				
+			} else {
+				
+			}
 		}
 		
 		return cut;
 	}
-	
+		private static int getMin(int x, int y, int z) {
+			if( x< y)
+			{
+				return (x < z)? x :z;
+			}
+			else 
+			{
+				return(y < z)? y : z;
+			}
+		}
 	/**
 	 * 
 	 * @param x the target string assumed longer than y
