@@ -6,6 +6,6 @@ public class TestStringAlign {
 		String s2 = "GCGCAATG";
 		
 		String test = DynamicProgramming.stringAlignment(s1, s2);
-		System.out.println("expected: GCGC$AATG\n Actual:" + test);
+		System.out.println("expected: GCGC$AATG\n Actual:  " + test);
 	}
 }

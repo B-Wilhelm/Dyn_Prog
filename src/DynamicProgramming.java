@@ -35,18 +35,23 @@ public class DynamicProgramming {
 	
 	/**
 	 * 
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x the target string assumed longer than y
+	 * @param y the string to be modified to align with x
+	 * @return the best possible alignment of y  with regards to x
 	 */
 	public static String stringAlignment(String x, String y) {
 		scoreTable = new Cell[y.length()+1][x.length()+1];
 		initializeScoreTable();
 		fillInScoreTable(x,y);
-		String[] alignments = (String[]) getTraceback(x,y);
-		return alignments[1];
+		return getTraceback(x,y);
 	}
 	//stringAlignment helper methods
+	/**
+	 * 
+	 * @param r the row of the cell to get
+	 * @param c the column of the cell to get
+	 * @return returns a cell based on the default cell link process
+	 */
 	private static Cell getInitialPointer(int r, int c) {
 		if(r == 0 && c != 0) {
 			return scoreTable[r][c-1];
@@ -58,7 +63,12 @@ public class DynamicProgramming {
 			return null;
 		}
 	}
-	
+	/**
+	 * 
+	 * @param r the row of the cell
+	 * @param c the column of the cell 
+	 * @return sets the score of the outermost row/column to max  and all other cells to 0
+	 */
 	private static int getInitalScore(int r, int c) {
 		if(r == 0 && c != 0) {
 			return c*$;
@@ -70,20 +80,30 @@ public class DynamicProgramming {
 			return 0;
 		}
 	}
-	
+	/**
+	 *initializes the table holding the penalty(Score) of manipulating a the string
+	 */
 	private static void initializeScoreTable() {
 		for(int i = 0; i < scoreTable.length; i++) {
-			for(int j = 0; j < scoreTable.length; j++) {
-				scoreTable[i][j] = new Cell(i, j);
-				scoreTable[i][j].setPenalty(getInitalScore(i, j));
-				scoreTable[i][j].setPrevious(getInitialPointer(i, j));
+			for(int j = 0; j < scoreTable[0].length; j++) {
+				scoreTable[i][j] = new Cell(i, j);//creating the cells
+			}
+		}
+		for(int i = 0; i < scoreTable.length; i++) {
+			for(int j = 0; j < scoreTable[0].length; j++) {
+				scoreTable[i][j].setPenalty(getInitalScore(i, j));//initializes the penalties
+				scoreTable[i][j].setPrevious(getInitialPointer(i, j));//initializes the links between cells
 			}
 		}
 	}
-	
+	/**
+	 *  iterates through the scoreTable to fill in each cell
+	 * @param s1 the string we are trying to align to
+	 * @param s2 the string we are modifying
+	 */
 	private static void fillInScoreTable(String s1, String s2){
 		for(int i = 1; i < scoreTable.length; i++) {
-			for(int j = 1; j < scoreTable.length; j++) {
+			for(int j = 1; j < scoreTable[0].length; j++) {
 				Cell cur = scoreTable[i][j];
 				Cell cellAbove = scoreTable[i-1][j];
 				Cell cellLeft = scoreTable[i][j-1];
@@ -92,7 +112,15 @@ public class DynamicProgramming {
 			}
 		}
 	}
-	
+	/**
+	 * determines what the minimum penalty for a character at cur
+	 * @param cur the cell to be filled
+	 * @param cellAbove a cell in the same column 1 row above
+	 * @param cellLeft a cell in the same row one column to the left
+	 * @param cellAboveLeft the cell 1 row and 1 column previous to cur
+	 * @param s1 the string we are aligning to
+	 * @param s2 the string we are modifying 
+	 */
 	private static void fillInCell(Cell cur, Cell cellAbove, Cell cellLeft, Cell cellAboveLeft, String s1, String s2) {
 		int row$Score = cellAbove.getPenalty() + $;
 		int col$Score = cellLeft.getPenalty() + $;
@@ -105,8 +133,8 @@ public class DynamicProgramming {
 			isMatchScore += mismatch;
 		}
 		
-		if(row$Score >= col$Score) {
-			if(isMatchScore >= row$Score) {
+		if(row$Score <= col$Score) {
+			if(isMatchScore <= row$Score) {
 				cur.setPenalty(isMatchScore);
 				cur.setPrevious(cellAboveLeft);
 			} else {
@@ -114,7 +142,7 @@ public class DynamicProgramming {
 				cur.setPrevious(cellAbove);
 			}
 		} else {
-			if(isMatchScore >= col$Score) {
+			if(isMatchScore <= col$Score) {
 				cur.setPenalty(isMatchScore);
 				cur.setPrevious(cellAboveLeft);
 			} else {
@@ -124,24 +152,25 @@ public class DynamicProgramming {
 		}
 	}
 	
-	private static Object getTraceback(String s1, String s2) {
-		StringBuffer align1Buf = new StringBuffer();
-		StringBuffer align2Buf = new StringBuffer();
-		Cell cur = scoreTable[scoreTable.length - 1][scoreTable[0].length -1];
+	/**
+	 * traces through the completed scoresTable finding the optimal character at each index.
+	 * @param s1 the string we are aligning to used only for its length
+	 * @param s2 the string we are modifying, used only for its length
+	 * @return the modified string s2 that most aligns with s1
+	 */
+	private static String getTraceback(String s1, String s2) {
+		
+		StringBuffer alignBuf = new StringBuffer();
+		Cell cur = scoreTable[s2.length()][s1.length()];
 		while(cur.getPrevious() != null) {
 			if(cur.getRow() - cur.getPrevious().getRow() == 1) {
-				align2Buf.insert(0, s2.charAt(cur.getRow()-1));
+				alignBuf.insert(0, s2.charAt(cur.getRow()-1));
 			}else {
-				align2Buf.insert(0,'$');
-			}
-			if(cur.getCol() - cur.getPrevious().getCol() == 1) {
-				align1Buf.insert(0, s1.charAt(cur.getCol() -1));
-			}else {
-				align1Buf.insert(0,'$');
+				alignBuf.insert(0,'$');
 			}
 			cur = cur.getPrevious();
 		}
-		String[] alignments = new String[] { align1Buf.toString(), align2Buf.toString() };
+		String alignments = alignBuf.toString();
 		return alignments;
 	}
 	
