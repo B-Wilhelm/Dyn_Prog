@@ -25,13 +25,15 @@ public class ImageProcessor {
 	 * @return The picture after the width has been reduced/modified
 	 */
 	public Picture reduceWidth(double x) {
-		Picture P = new Picture((int)Math.ceil(x), p.height());
+		Picture P = new Picture(p);
 		Picture comp = new Picture(p);
 		ArrayList<Integer> toRemove;
 		
-		for(int i = 0; i < (comp.width()-(int)x); i++) {
-			I = new int[comp.height()][comp.width()-i];
-			computeMatrix();
+		for(int i = 0; x < P.width(); i++) {
+			P = new Picture(p.width()-(i+1), p.height());
+			
+			I = new int[comp.height()][comp.width()];
+			computeMatrix(comp);
 			toRemove = DynamicProgramming.minCostVC(I);
 			P = makeImage(comp, P, toRemove);
 			comp = new Picture(P);
@@ -51,11 +53,14 @@ public class ImageProcessor {
 		
 		for(i = 0; i < P.height(); i++) {
 			for(j = 0, l = 0; j < P.width(); j++, l++) {
-				if(toRemove.get(j*2).equals(j) && (toRemove.get(j*2+1).equals(l))) {
+				if(toRemove.get(l*2).equals(l) && (toRemove.get(l*2+1).equals(i))) {
+					
 					j--;
+//					P.set(j, i, Color.BLACK);
 				}
 				else {
-					P.set(j, i, c.get(l, i));
+					Color clr = c.get(l,i);
+					P.set(j, i, clr);
 				}
 			}
 		}
@@ -66,13 +71,13 @@ public class ImageProcessor {
 	/**
 	 * Fills the matrix I with values made from calling importance() on every pixel in the Picture
 	 */
-	private void computeMatrix() {
+	private void computeMatrix(Picture c) {
 		if(I == null) {
 			return;
 		}
 		
-		for(int i = 0; i < p.height(); i++) {
-			for(int j = 0; j < p.width(); j++) {
+		for(int i = 0; i < c.height(); i++) {
+			for(int j = 0; j < c.width(); j++) {
 				I[i][j] = importance(i, j);
 			}
 		}
